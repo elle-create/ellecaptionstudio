@@ -439,18 +439,18 @@ For each caption:
 Format each caption clearly numbered as Caption 1, Caption 2, Caption 3.`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/.netlify/functions/claude', {
         method: 'POST',
         headers: {
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
+
+
           'content-type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true'
+
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ apiKey: apiKey, payload: {
           model: 'claude-opus-4-6',
           max_tokens: 1200,
-          messages: [{ role: 'user', content: prompt }]
+          messages: [{ role: 'user', content: prompt }] }
         })
       });
 
