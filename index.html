@@ -487,7 +487,18 @@ Format each caption clearly numbered as Caption 1, Caption 2, Caption 3.`;
     return chunks.slice(0, 3);
   }
 
+  function stripMarkdown(text) {
+    return text
+      .replace(/^#{1,6}s+/gm, '')
+      .replace(/**(.*?)**/g, '$1')
+      .replace(/*(.*?)*/g, '$1')
+      .replace(/^[-*]s+/gm, '')
+      .replace(/^---+$/gm, '')
+      .trim();
+  }
+
   function escapeHtml(text) {
+    text = stripMarkdown(text);
     return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
