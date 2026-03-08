@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elle Wilder · Caption Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --parchment: #ede5d0;
+    --wine: #722f37;
+    --wine-light: #9a4a53;
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --bark: #3d2b1f;
+    --fog: #8a9a8e;
+    --text: #2a1f1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(ellipse at 20% 20%, rgba(201,169,110,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(114,47,55,0.06) 0%, transparent 60%);
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .logo-mark {
+    display: inline-block;
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--bark);
+    margin-bottom: 8px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--wine);
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-top: 12px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 2px;
+    padding: 36px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(8px);
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .api-section {
+    animation-delay: 0.1s;
+  }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 10px;
+  }
+
+  input[type="password"],
+  input[type="text"],
+  textarea {
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 1px;
+    padding: 14px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--gold);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  .api-note {
+    font-size: 0.72rem;
+    color: var(--fog);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .api-note a {
+    color: var(--wine);
+    text-decoration: none;
+  }
+
+  .tone-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .tone-btn {
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 1px;
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--fog);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+
+  .tone-btn:hover {
+    border-color: var(--gold);
+    color: var(--bark);
+  }
+
+  .tone-btn.active {
+    background: var(--wine);
+    border-color: var(--wine);
+    color: white;
+  }
+
+  .generate-btn {
+    width: 100%;
+    background: var(--wine);
+    color: white;
+    border: none;
+    border-radius: 1px;
+    padding: 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .generate-btn:hover:not(:disabled) {
+    background: var(--wine-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(114,47,55,0.2);
+  }
+
+  .generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .results {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 2px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+
+  .result-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .caption-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .caption-num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201,169,110,0.2);
+  }
+
+  .caption-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--bark);
+    white-space: pre-wrap;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 1px;
+    padding: 6px 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fog);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    border-color: var(--gold);
+    color: var(--bark);
+  }
+
+  .copy-btn.copied {
+    border-color: var(--fog);
+    color: var(--fog);
+  }
+
+  .error-msg {
+    background: rgba(114,47,55,0.06);
+    border: 1px solid rgba(114,47,55,0.2);
+    border-radius: 2px;
+    padding: 16px 20px;
+    font-size: 0.85rem;
+    color: var(--wine);
+    line-height: 1.5;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 8px 0 20px;
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201,169,110,0.25);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 2.2rem; }
+    .card { padding: 24px 20px; }
+    .tone-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="logo-mark"></div>
+    <h1><em>Elle Wilder</em><br>Caption Studio</h1>
+    <p class="subtitle">Stillwater Vineyard · Romance</p>
+  </header>
+
+  <div class="card api-section">
+    <label>Anthropic API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
+    <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+      <input type="checkbox" id="rememberKey" style="width:auto; accent-color:var(--wine);">
+      <label for="rememberKey" style="margin:0; font-size:0.72rem; letter-spacing:0.1em; cursor:pointer;">Remember my key on this device</label>
+    </div>
+    <p class="api-note" style="margin-top:8px;">Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
+  </div>
+
+  <div class="card" style="animation-delay:0.2s">
+    <label>Your Post Idea</label>
+    <textarea id="postIdea" placeholder="e.g. Book 2 launch · forbidden romance · wine country harvest season · readers who stayed up all night reading..."></textarea>
+
+    <div class="divider">Tone</div>
+
+    <label>Choose a vibe</label>
+    <div class="tone-grid">
+      <button class="tone-btn active" data-tone="romantic">✦ Romantic & Dreamy</button>
+      <button class="tone-btn" data-tone="bold">◈ Bold & Intriguing</button>
+      <button class="tone-btn" data-tone="personal">◇ Personal & Warm</button>
+      <button class="tone-btn" data-tone="all">❧ All Three Styles</button>
+    </div>
+
+    <br>
+    <button class="generate-btn" id="generateBtn" onclick="generate()">
+      Generate Captions
+    </button>
+  </div>
+
+  <div id="results"></div>
+
+</div>
+
+<script>
+  // Load saved API key
+  const savedKey = localStorage.getItem('elleWilderApiKey');
+  if (savedKey) {
+    document.getElementById('apiKey').value = savedKey;
+    document.getElementById('rememberKey').checked = true;
+  }
+
+  // Save key when checkbox or input changes
+  document.getElementById('rememberKey').addEventListener('change', function() {
+    if (this.checked) {
+      localStorage.setItem('elleWilderApiKey', document.getElementById('apiKey').value);
+    } else {
+      localStorage.removeItem('elleWilderApiKey');
+    }
+  });
+
+  document.getElementById('apiKey').addEventListener('input', function() {
+    if (document.getElementById('rememberKey').checked) {
+      localStorage.setItem('elleWilderApiKey', this.value);
+    }
+  });
+
+  let selectedTone = 'romantic';
+
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedTone = btn.dataset.tone;
+    });
+  });
+
+  const tonePrompts = {
+    romantic: 'Write 3 romantic and dreamy Instagram captions',
+    bold: 'Write 3 bold, intriguing Instagram captions with a hook that creates curiosity',
+    personal: 'Write 3 warm, personal Instagram captions that feel like the author is speaking directly to her readers',
+    all: 'Write 3 Instagram captions — one romantic/dreamy, one bold/intriguing, and one warm/personal'
+  };
+
+  async function generate() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const postIdea = document.getElementById('postIdea').value.trim();
+    const resultsDiv = document.getElementById('results');
+    const btn = document.getElementById('generateBtn');
+
+    if (!apiKey) {
+      resultsDiv.innerHTML = '<div class="error-msg">Please enter your Anthropic API key above.</div>';
+      return;
+    }
+    if (!postIdea) {
+      resultsDiv.innerHTML = '<div class="error-msg">Please describe your post idea.</div>';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Crafting captions...';
+    resultsDiv.innerHTML = '';
+
+    const prompt = `${tonePrompts[selectedTone]} for romance author Elle Wilder (pen name) about: ${postIdea}
+
+Context: Elle Wilder writes the Stillwater Vineyard Romance series — billionaire romance, forbidden love, wine country settings in Sonoma. Her readers are Kindle Unlimited romance fans who love heat, emotion, and escape.
+
+For each caption:
+- Start with a compelling hook
+- Keep the wine country / sophisticated aesthetic
+- End with a call to action or question
+- Include 5-6 relevant hashtags
+
+Format each caption clearly numbered as Caption 1, Caption 2, Caption 3.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-opus-4-6',
+          max_tokens: 1200,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error?.message || 'API error');
+      }
+
+      const text = data.content[0].text;
+      const captions = parseCaptions(text);
+
+      resultsDiv.innerHTML = captions.map((cap, i) => `
+        <div class="result-card">
+          <div class="caption-num">Caption ${i + 1}</div>
+          <button class="copy-btn" onclick="copyCaption(this, ${i})">Copy</button>
+          <div class="caption-text" id="cap-${i}">${escapeHtml(cap)}</div>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      resultsDiv.innerHTML = `<div class="error-msg">Something went wrong: ${err.message}<br><br>Double-check your API key and try again.</div>`;
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Generate Captions';
+  }
+
+  function parseCaptions(text) {
+    const parts = text.split(/Caption\s+\d+[:\.]?\s*/i).filter(p => p.trim());
+    if (parts.length >= 2) return parts.map(p => p.trim());
+    // fallback: split by double newline
+    const chunks = text.split(/\n\n+/).filter(p => p.trim().length > 40);
+    return chunks.slice(0, 3);
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function copyCaption(btn, index) {
+    const text = document.getElementById(`cap-${index}`).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Allow Enter in textarea with shift
+  document.getElementById('postIdea').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generate(); }
+  });
+</script>
+</body>
+</html>
